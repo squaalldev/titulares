@@ -1,0 +1,54 @@
+/* Main container styling */
+.block-container {
+    padding-top: 1rem;
+    padding-bottom: 5rem;
+}
+
+/* Title spacing */
+h1 {
+    margin-top: -2rem;
+    padding-top: 0.5rem;
+}
+
+/* Subtitle spacing */
+h4 {
+    margin-top: 0.5rem;
+    padding-top: 0rem;
+}
+
+/* Custom button styling */
+/* Custom styling for the generate button */
+[data-testid="stButton"] > button {
+    background: linear-gradient(90deg, #FFD700, #FFA500) !important;
+    color: #333 !important;
+    padding: 8px 15px !important;  /* Reduced padding */
+    border-radius: 8px !important;
+    border: none !important;
+    font-weight: bold !important;
+    width: 100% !important;
+    text-align: center !important;
+    cursor: pointer !important;
+    transition: all 0.3s ease !important;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1) !important;
+    margin-top: 10px !important;   /* Reduced top margin */
+    margin-bottom: 10px !important; /* Reduced bottom margin */
+}
+
+[data-testid="stButton"] > button:hover {
+    background: linear-gradient(90deg, #FFA500, #FFD700) !important;
+    box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15) !important;
+    transform: translateY(-2px) !important;
+}
+
+[data-testid="stButton"] > button:active {
+    transform: translateY(1px) !important;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1) !important;
+}
+
+/* Results container */
+.results-container {
+    border: 1px solid #000000; 
+    padding: 15px; 
+    border-radius: 8px; 
+    background-color: #ffffff;
+}
