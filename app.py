@@ -55,7 +55,7 @@ def build_headline_context(selected_formula_key, selected_angle, target_audience
     }
 
 
-def generate_headlines(number_of_headlines, target_audience, product, temperature, selected_formula_key, selected_formula, selected_angle):
+def generate_headlines(number_of_headlines, target_audience, product, temperature, selected_formula_key, selected_angle):
     context = build_headline_context(
         selected_formula_key=selected_formula_key,
         selected_angle=selected_angle,
@@ -264,7 +264,6 @@ if submit:
                 product,
                 temperature,
                 selected_formula_key,
-                selected_formula,
                 selected_angle
             )
 
