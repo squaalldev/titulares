@@ -11,7 +11,13 @@ from angles import angles
 load_dotenv()
 
 # Configurar la API de Google
-client = genai.Client(api_key=os.getenv("GOOGLE_API_KEY"))
+api_key = os.getenv("GEMINI_API_KEY")
+
+if not api_key:
+    st.error("Falta configurar GEMINI_API_KEY en el archivo .env o en los Secrets del Space.")
+    st.stop()
+
+client = genai.Client(api_key=api_key)
 
 
 def build_headline_context(selected_formula_key, selected_angle, target_audience, product):
@@ -224,7 +230,7 @@ with col1:
             "Creatividad",
             min_value=0.0,
             max_value=2.0,
-            value=1.0,
+            value=0.7,
             step=0.1
         )
 
@@ -233,7 +239,6 @@ with col1:
             options=list(headline_formulas.keys())
         )
 
-        # Make sure "NINGUNO" appears first, then the rest alphabetically
         angle_keys = ["NINGUNO"] + sorted([key for key in angles.keys() if key != "NINGUNO"])
         selected_angle = st.selectbox(
             "Selecciona el ángulo para tus titulares",
