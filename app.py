@@ -133,9 +133,10 @@ PRINCIPIOS DE TITULACIÓN:
 - Usa contraste, curiosidad o resultado específico para detener el scroll.
 - Evita formato tipo bullet (por ejemplo: "Beneficio: detalle", listas fragmentadas o etiquetas).
 - Evita signos innecesarios, mayúsculas exageradas y relleno.
-- Longitud sugerida: entre 8 y 16 palabras por titular."""
-- Enfatiza el beneficio del producto sin depender de nombrarlo de forma explícita en todos los titulares."""
-- No menciones explícitamente el producto o servicio en ningún titular."""
+- Longitud sugerida: entre 8 y 16 palabras por titular.
+- Enfatiza el beneficio del producto sin depender de nombrarlo de forma explícita en todos los titulares.
+- No menciones explícitamente el producto o servicio en ningún titular.
+"""
 
     headlines_instruction = (
         f"{system_prompt}\n\n"
