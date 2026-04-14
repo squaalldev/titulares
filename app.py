@@ -4,7 +4,6 @@ import os
 from google import genai
 from google.genai import types
 import random
-import re
 from formulas import headline_formulas
 from angles import angles
 
@@ -19,18 +18,6 @@ if not api_key:
     st.stop()
 
 client = genai.Client(api_key=api_key)
-
-
-SPANISH_STOPWORDS = {
-    "de", "del", "la", "el", "los", "las", "y", "o", "u", "a", "en", "con",
-    "para", "por", "sin", "un", "una", "unos", "unas", "al", "lo", "que", "tu", "tus"
-}
-
-
-def extract_product_keywords(product):
-    words = re.findall(r"[a-záéíóúñA-ZÁÉÍÓÚÑ0-9]+", product.lower())
-    keywords = [w for w in words if len(w) >= 4 and w not in SPANISH_STOPWORDS]
-    return list(dict.fromkeys(keywords))
 
 
 def build_headline_context(selected_formula_key, selected_angle, target_audience, product):
@@ -111,55 +98,14 @@ def generate_headlines(number_of_headlines, target_audience, product, temperatur
         "- Piensa en situaciones reales y cotidianas del avatar (momento, contexto, tensión real).",
         "- Cada titular debe reflejar al menos una situación concreta del avatar, no ideas genéricas."
     ])
-        "- Longitud sugerida: entre 8 y 16 palabras por titular."
-    ])
-    product_keywords = extract_product_keywords(product)
-
-    system_prompt = f"""Eres un copywriter de clase mundial especializado en escribir titulares, hooks y líneas de asunto que captan la atención rápidamente y despiertan una curiosidad genuina.
-
-OBJETIVO:
-Generar titulares atractivos, claros y creíbles para el público indicado.
-
-FORMATO OBLIGATORIO:
-- Devuelve EXACTAMENTE {number_of_headlines} líneas.
-- Cada línea debe empezar con número y punto (ejemplo: 1. ...).
-- No agregues introducciones, notas, categorías ni cierre.
-- Una sola idea por línea.
-- Cada línea debe sonar como titular completo, no como viñeta o fragmento.
-
-CALIDAD:
-- Evita clichés y frases vacías.
-- Prioriza beneficio concreto + especificidad.
-- Mantén tono natural para el público objetivo.
-- No copies ejemplos literalmente.
-- Evita repetir estructuras entre líneas.
-- Enfatiza el beneficio del producto sin depender de nombrarlo de forma explícita en todos los titulares.
-
-PRINCIPIOS DE TITULACIÓN:
-- Abre con la promesa o ángulo principal en las primeras palabras.
-- Usa contraste, curiosidad o resultado específico para detener el scroll.
-- Evita formato tipo bullet (por ejemplo: "Beneficio: detalle", listas fragmentadas o etiquetas).
-- Evita signos innecesarios, mayúsculas exageradas y relleno.
-- Longitud sugerida: entre 8 y 16 palabras por titular.
-- Enfatiza el beneficio del producto sin depender de nombrarlo de forma explícita en todos los titulares.
-- No menciones explícitamente el producto o servicio en ningún titular.
-"""
 
     headlines_instruction = (
         f"{system_prompt}\n\n"
         f"PÚBLICO: {target_audience}\n"
         f"PRODUCTO/SERVICIO (USAR COMO CONTEXTO, PRIORIZAR BENEFICIO): {product}\n"
-        f"CONTEXTO INTERNO (NO MENCIONAR EN EL OUTPUT): {product}\n"
         f"FÓRMULA: {selected_formula_key}\n"
         f"DESCRIPCIÓN CORTA DE LA FÓRMULA:\n{context['formula_description_short']}\n\n"
     )
-
-    if product_keywords:
-        blocked_terms = ", ".join(product_keywords)
-        headlines_instruction += (
-            "PALABRAS PROHIBIDAS EN EL TITULAR (derivadas del producto): "
-            f"{blocked_terms}\n\n"
-        )
 
     if selected_angle != "NINGUNO":
         headlines_instruction += (
@@ -177,6 +123,14 @@ PRINCIPIOS DE TITULACIÓN:
     headlines_instruction += "GUÍA ADICIONAL:\n"
     for guidance in context["extra_guidance"]:
         headlines_instruction += f"- {guidance}\n"
+
+    headlines_instruction += (
+        "\nCHECKLIST DE REALISMO DEL AVATAR (aplícalo en cada titular):\n"
+        "- Incluye una situación cotidiana reconocible del público.\n"
+        "- Incluye una tensión real (dolor, objeción o limitación concreta).\n"
+        "- Conecta con una transformación deseada y creíble.\n"
+        "- Evita titulares intercambiables que podrían servir para cualquier audiencia.\n"
+    )
 
     headlines_instruction += "\n"
     headlines_instruction += f"Genera ahora {number_of_headlines} titulares."
