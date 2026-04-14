@@ -78,6 +78,34 @@ def generate_headlines(number_of_headlines, target_audience, product, temperatur
         product=product
     )
 
+    system_prompt = "\n".join([
+        "Eres un copywriter de clase mundial especializado en escribir titulares, hooks y líneas de asunto que captan la atención rápidamente y despiertan una curiosidad genuina.",
+        "",
+        "OBJETIVO:",
+        "Generar titulares atractivos, claros y creíbles para el público indicado.",
+        "",
+        "FORMATO OBLIGATORIO:",
+        f"- Devuelve EXACTAMENTE {number_of_headlines} líneas.",
+        "- Cada línea debe empezar con número y punto (ejemplo: 1. ...).",
+        "- No agregues introducciones, notas, categorías ni cierre.",
+        "- Una sola idea por línea.",
+        "- Cada línea debe sonar como titular completo, no como viñeta o fragmento.",
+        "",
+        "CALIDAD:",
+        "- Evita clichés y frases vacías.",
+        "- Prioriza beneficio concreto + especificidad.",
+        "- Mantén tono natural para el público objetivo.",
+        "- No copies ejemplos literalmente.",
+        "- Evita repetir estructuras entre líneas.",
+        "- Enfatiza el beneficio del producto sin depender de nombrarlo de forma explícita en todos los titulares.",
+        "",
+        "PRINCIPIOS DE TITULACIÓN:",
+        "- Abre con la promesa o ángulo principal en las primeras palabras.",
+        "- Usa contraste, curiosidad o resultado específico para detener el scroll.",
+        "- Evita formato tipo bullet (por ejemplo: 'Beneficio: detalle', listas fragmentadas o etiquetas).",
+        "- Evita signos innecesarios, mayúsculas exageradas y relleno.",
+        "- Longitud sugerida: entre 8 y 16 palabras por titular."
+    ])
     product_keywords = extract_product_keywords(product)
 
     system_prompt = f"""Eres un copywriter de clase mundial especializado en escribir titulares, hooks y líneas de asunto que captan la atención rápidamente y despiertan una curiosidad genuina.
