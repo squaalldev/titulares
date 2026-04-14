@@ -90,6 +90,7 @@ FORMATO OBLIGATORIO:
 - Cada línea debe empezar con número y punto (ejemplo: 1. ...).
 - No agregues introducciones, notas, categorías ni cierre.
 - Una sola idea por línea.
+- Cada línea debe sonar como titular completo, no como viñeta o fragmento.
 
 CALIDAD:
 - Evita clichés y frases vacías.
@@ -97,6 +98,14 @@ CALIDAD:
 - Mantén tono natural para el público objetivo.
 - No copies ejemplos literalmente.
 - Evita repetir estructuras entre líneas.
+- Enfatiza el beneficio del producto sin depender de nombrarlo de forma explícita en todos los titulares.
+
+PRINCIPIOS DE TITULACIÓN:
+- Abre con la promesa o ángulo principal en las primeras palabras.
+- Usa contraste, curiosidad o resultado específico para detener el scroll.
+- Evita formato tipo bullet (por ejemplo: "Beneficio: detalle", listas fragmentadas o etiquetas).
+- Evita signos innecesarios, mayúsculas exageradas y relleno.
+- Longitud sugerida: entre 8 y 16 palabras por titular."""
 - Enfatiza el beneficio del producto sin depender de nombrarlo de forma explícita en todos los titulares."""
 - No menciones explícitamente el producto o servicio en ningún titular."""
 
