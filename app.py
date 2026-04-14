@@ -97,11 +97,13 @@ CALIDAD:
 - Mantén tono natural para el público objetivo.
 - No copies ejemplos literalmente.
 - Evita repetir estructuras entre líneas.
+- Enfatiza el beneficio del producto sin depender de nombrarlo de forma explícita en todos los titulares."""
 - No menciones explícitamente el producto o servicio en ningún titular."""
 
     headlines_instruction = (
         f"{system_prompt}\n\n"
         f"PÚBLICO: {target_audience}\n"
+        f"PRODUCTO/SERVICIO (USAR COMO CONTEXTO, PRIORIZAR BENEFICIO): {product}\n"
         f"CONTEXTO INTERNO (NO MENCIONAR EN EL OUTPUT): {product}\n"
         f"FÓRMULA: {selected_formula_key}\n"
         f"DESCRIPCIÓN CORTA DE LA FÓRMULA:\n{context['formula_description_short']}\n\n"
