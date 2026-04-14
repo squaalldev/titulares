@@ -77,6 +77,13 @@ Bienvenido a Enchanted Hooks, tu asistente mágico para crear titulares cautivad
 4. Ajusta la creatividad según necesites
 5. Revisa y adapta los resultados
 
+#### Realismo del Avatar (Recomendado)
+1. Describe al público como personas reales (no etiquetas amplias)
+2. Incluye contexto cotidiano (momento del día, limitaciones, presión real)
+3. Considera objeciones concretas (tiempo, dinero, experiencia, miedo a fallar)
+4. Pide titulares con tensión + transformación creíble
+5. Evita resultados genéricos que sirvan para cualquier audiencia
+
 #### Qué Evitar
 1. Descripciones vagas
 2. Creatividad sin propósito

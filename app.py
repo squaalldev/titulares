@@ -104,6 +104,13 @@ def generate_headlines(number_of_headlines, target_audience, product, temperatur
         "- Usa contraste, curiosidad o resultado específico para detener el scroll.",
         "- Evita formato tipo bullet (por ejemplo: 'Beneficio: detalle', listas fragmentadas o etiquetas).",
         "- Evita signos innecesarios, mayúsculas exageradas y relleno.",
+        "- Longitud sugerida: entre 8 y 16 palabras por titular.",
+        "",
+        "ANÁLISIS DEL AVATAR (INTERNO, NO MOSTRAR):",
+        "- Antes de escribir, identifica deseos, frustraciones, objeciones y transformación que busca el avatar.",
+        "- Piensa en situaciones reales y cotidianas del avatar (momento, contexto, tensión real).",
+        "- Cada titular debe reflejar al menos una situación concreta del avatar, no ideas genéricas."
+    ])
         "- Longitud sugerida: entre 8 y 16 palabras por titular."
     ])
     product_keywords = extract_product_keywords(product)
