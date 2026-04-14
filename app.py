@@ -24,11 +24,12 @@ def build_headline_context(selected_formula_key, selected_angle, target_audience
     selected_formula = headline_formulas[selected_formula_key]
 
     formula_description = selected_formula.get("description", "").strip()
+    formula_description_short = " ".join(formula_description.split())[:420]
     formula_examples = selected_formula.get("examples", [])
 
     random_examples = random.sample(
         formula_examples,
-        min(5, len(formula_examples))
+        min(2, len(formula_examples))
     ) if formula_examples else []
 
     angle_instruction = ""
@@ -36,7 +37,7 @@ def build_headline_context(selected_formula_key, selected_angle, target_audience
 
     if selected_angle != "NINGUNO" and selected_angle in angles:
         angle_instruction = angles[selected_angle].get("instruction", "").strip()
-        angle_examples = angles[selected_angle].get("examples", [])[:3]
+        angle_examples = angles[selected_angle].get("examples", [])[:1]
 
     extra_guidance = [
         f"Escribe para {target_audience} como personas reales, no como una categoría genérica.",
@@ -48,6 +49,7 @@ def build_headline_context(selected_formula_key, selected_angle, target_audience
 
     return {
         "formula_description": formula_description,
+        "formula_description_short": formula_description_short,
         "formula_examples": random_examples,
         "angle_instruction": angle_instruction,
         "angle_examples": angle_examples,
@@ -63,81 +65,62 @@ def generate_headlines(number_of_headlines, target_audience, product, temperatur
         product=product
     )
 
-    system_prompt = """You are a world-class copywriter specialized in writing headlines, hooks, and subject lines that capture attention quickly and spark genuine curiosity.
+    system_prompt = "\n".join([
+        "Eres un copywriter de clase mundial especializado en escribir titulares, hooks y líneas de asunto que captan la atención rápidamente y despiertan una curiosidad genuina.",
+        "",
+        "OBJETIVO:",
+        "Generar titulares atractivos, claros y creíbles para el público indicado.",
+        "",
+        "FORMATO OBLIGATORIO:",
+        f"- Devuelve EXACTAMENTE {number_of_headlines} líneas.",
+        "- Cada línea debe empezar con número y punto (ejemplo: 1. ...).",
+        "- No agregues introducciones, notas, categorías ni cierre.",
+        "- Una sola idea por línea.",
+        "- Cada línea debe sonar como titular completo, no como viñeta o fragmento.",
+        "",
+        "CALIDAD:",
+        "- Evita clichés y frases vacías.",
+        "- Prioriza beneficio concreto + especificidad.",
+        "- Mantén tono natural para el público objetivo.",
+        "- No copies ejemplos literalmente.",
+        "- Evita repetir estructuras entre líneas.",
+        "- Enfatiza el beneficio del producto sin depender de nombrarlo de forma explícita en todos los titulares.",
+        "",
+        "PRINCIPIOS DE TITULACIÓN:",
+        "- Abre con la promesa o ángulo principal en las primeras palabras.",
+        "- Usa contraste, curiosidad o resultado específico para detener el scroll.",
+        "- Evita formato tipo bullet (por ejemplo: 'Beneficio: detalle', listas fragmentadas o etiquetas).",
+        "- Evita signos innecesarios, mayúsculas exageradas y relleno.",
+        "- Longitud sugerida: entre 8 y 16 palabras por titular."
+    ])
 
-FORMAT RULES:
-- Each headline must start with a number and period
-- Write one headline per line
-- Do not add explanations or categories
-- Avoid unnecessary symbols
-- Each headline must feel complete, intriguing, and natural
-
-CORE RULES:
-- Each headline must be unique
-- Avoid clichés and generic language
-- Keep the tone intriguing but credible
-- Use language that feels natural for the target audience
-- Focus on clear and desirable benefits
-"""
-
-    headlines_instruction = f"{system_prompt}\n\n"
-
-    if selected_angle != "NINGUNO":
-        headlines_instruction += f"""
-ÁNGULO PRINCIPAL: {selected_angle}
-Usa este ángulo como una capa de estilo. Modifica cómo se expresa el titular, no la estructura de la fórmula.
-
-INSTRUCCIÓN DEL ÁNGULO:
-{context["angle_instruction"]}
-
-EJEMPLOS DEL ÁNGULO:
-"""
-        for example in context["angle_examples"]:
-            headlines_instruction += f"- {example}\n"
-
-    headlines_instruction += (
-        f"\nTu tarea es crear {number_of_headlines} titulares para {target_audience} "
-        f"sobre {product}, usando la fórmula seleccionada"
+    headlines_instruction = (
+        f"{system_prompt}\n\n"
+        f"PÚBLICO: {target_audience}\n"
+        f"PRODUCTO/SERVICIO (USAR COMO CONTEXTO, PRIORIZAR BENEFICIO): {product}\n"
+        f"FÓRMULA: {selected_formula_key}\n"
+        f"DESCRIPCIÓN CORTA DE LA FÓRMULA:\n{context['formula_description_short']}\n\n"
     )
 
     if selected_angle != "NINGUNO":
-        headlines_instruction += f" y el ángulo {selected_angle}"
-
-    headlines_instruction += ".\n\n"
-
-    headlines_instruction += (
-        f"Antes de escribir, piensa en {target_audience} como personas reales: "
-        f"qué desean, qué les frustra, qué objeciones tienen y qué transformación buscan. "
-        f"Haz que cada titular conecte con esa realidad de forma natural.\n\n"
-    )
-
-    headlines_instruction += (
-        f"No dependas de mencionar explícitamente {product} para generar interés.\n\n"
-    )
+        headlines_instruction += (
+            f"ÁNGULO: {selected_angle}\n"
+            f"INSTRUCCIÓN DE ÁNGULO: {context['angle_instruction']}\n\n"
+        )
 
     random_examples = context["formula_examples"]
+    if random_examples:
+        headlines_instruction += "EJEMPLOS DE REFERENCIA:\n"
+        for i, example in enumerate(random_examples, 1):
+            headlines_instruction += f"{i}. {example}\n"
+        headlines_instruction += "\n"
 
-    headlines_instruction += "FÓRMULA:\n"
-    headlines_instruction += f"{context['formula_description']}\n\n"
+    headlines_instruction += "GUÍA ADICIONAL:\n"
+    for guidance in context["extra_guidance"]:
+        headlines_instruction += f"- {guidance}\n"
 
-    headlines_instruction += "EJEMPLOS:\n"
-    for i, example in enumerate(random_examples, 1):
-        headlines_instruction += f"{i}. {example}\n"
-
-    headlines_instruction += "\nREGLAS DE GENERACIÓN:\n"
-    headlines_instruction += "- Mantén una estructura y longitud similares a las de los ejemplos\n"
-    headlines_instruction += "- Conserva la especificidad y el nivel de detalle\n"
-    headlines_instruction += "- Inspírate en los patrones sin copiar literalmente\n"
-    headlines_instruction += "- Haz que cada titular suene natural, claro y creíble\n\n"
-
-    headlines_instruction += (
-        f"Genera ahora {number_of_headlines} titulares originales que respeten la estructura de la fórmula"
-    )
-
-    if selected_angle != "NINGUNO":
-        headlines_instruction += f" y apliquen el ángulo {selected_angle}"
-
-    headlines_instruction += ".\n"
+    headlines_instruction += "\n"
+    headlines_instruction += f"Genera ahora {number_of_headlines} titulares."
 
     response = client.models.generate_content(
         model="gemini-2.5-flash-lite",
@@ -145,7 +128,7 @@ EJEMPLOS DEL ÁNGULO:
         config=types.GenerateContentConfig(
             temperature=temperature,
             top_p=0.65,
-            max_output_tokens=8196,
+            max_output_tokens=512,
         ),
     )
 
