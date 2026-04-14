@@ -4,6 +4,7 @@ import os
 from google import genai
 from google.genai import types
 import random
+import re
 from formulas import headline_formulas
 from angles import angles
 
@@ -18,6 +19,18 @@ if not api_key:
     st.stop()
 
 client = genai.Client(api_key=api_key)
+
+
+SPANISH_STOPWORDS = {
+    "de", "del", "la", "el", "los", "las", "y", "o", "u", "a", "en", "con",
+    "para", "por", "sin", "un", "una", "unos", "unas", "al", "lo", "que", "tu", "tus"
+}
+
+
+def extract_product_keywords(product):
+    words = re.findall(r"[a-záéíóúñA-ZÁÉÍÓÚÑ0-9]+", product.lower())
+    keywords = [w for w in words if len(w) >= 4 and w not in SPANISH_STOPWORDS]
+    return list(dict.fromkeys(keywords))
 
 
 def build_headline_context(selected_formula_key, selected_angle, target_audience, product):
@@ -65,6 +78,8 @@ def generate_headlines(number_of_headlines, target_audience, product, temperatur
         product=product
     )
 
+    product_keywords = extract_product_keywords(product)
+
     system_prompt = f"""Eres un copywriter de clase mundial especializado en escribir titulares, hooks y líneas de asunto que captan la atención rápidamente y despiertan una curiosidad genuina.
 
 OBJETIVO:
@@ -83,14 +98,23 @@ CALIDAD:
 - No copies ejemplos literalmente.
 - Evita repetir estructuras entre líneas.
 - Enfatiza el beneficio del producto sin depender de nombrarlo de forma explícita en todos los titulares."""
+- No menciones explícitamente el producto o servicio en ningún titular."""
 
     headlines_instruction = (
         f"{system_prompt}\n\n"
         f"PÚBLICO: {target_audience}\n"
         f"PRODUCTO/SERVICIO (USAR COMO CONTEXTO, PRIORIZAR BENEFICIO): {product}\n"
+        f"CONTEXTO INTERNO (NO MENCIONAR EN EL OUTPUT): {product}\n"
         f"FÓRMULA: {selected_formula_key}\n"
         f"DESCRIPCIÓN CORTA DE LA FÓRMULA:\n{context['formula_description_short']}\n\n"
     )
+
+    if product_keywords:
+        blocked_terms = ", ".join(product_keywords)
+        headlines_instruction += (
+            "PALABRAS PROHIBIDAS EN EL TITULAR (derivadas del producto): "
+            f"{blocked_terms}\n\n"
+        )
 
     if selected_angle != "NINGUNO":
         headlines_instruction += (
